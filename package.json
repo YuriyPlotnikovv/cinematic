@@ -1,16 +1,30 @@
 {
-  "name": "cinemaddict",
-  "version": "17.0.0",
-  "private": true,
-  "description": "Проект «{{projectTitle}}» от HTML Academy",
+  "name": "kinoman",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Учебный проект",
   "scripts": {
     "lint": "eslint src/"
   },
   "devDependencies": {
+    "@babel/core": "^7.22.11",
+    "@babel/preset-env": "^7.22.14",
+    "babel-loader": "^9.1.3",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.8.1",
     "eslint": "8.13.0",
-    "eslint-config-htmlacademy": "5.1.2"
+    "eslint-config-htmlacademy": "5.1.2",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   },
   "engines": {
     "node": "16"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.9",
+    "flatpickr": "^4.6.13",
+    "he": "^1.2.0"
   }
 }
