@@ -3,7 +3,7 @@ import { createElement } from '../render';
 const createNewButtonTemplate = () =>
   `<button class="films-list__show-more">Show more</button>`;
 
-export default class NewShowMoreButtonView {
+export default class ShowMoreButtonView {
   getTemplate() {
     return createNewButtonTemplate();
   }

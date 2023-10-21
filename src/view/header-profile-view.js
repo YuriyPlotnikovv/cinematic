@@ -7,7 +7,7 @@ const createUserRankTemplate = () =>
   </section>
 `;
 
-export default class UserRankView {
+export default class HeaderProfileView {
   getTemplate() {
     return createUserRankTemplate();
   }

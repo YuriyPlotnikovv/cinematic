@@ -8,7 +8,7 @@ const createSortingTemplate = () =>
   </ul>
 `;
 
-export default class View {
+export default class SortingView {
   getTemplate() {
     return createSortingTemplate();
   }

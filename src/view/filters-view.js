@@ -9,7 +9,7 @@ const createFiltersTemplate = () =>
   </nav>
 `;
 
-export default class View {
+export default class FiltersView {
   getTemplate() {
     return createFiltersTemplate();
   }

@@ -2,10 +2,10 @@ import { createElement } from '../render';
 
 const createFilmListTemplate = () =>
   `<section class="films-list">
-      <h2 class="films-list__title">There are no movies in our database</h2>
+      <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
     </section>`;
 
-export default class View {
+export default class FilmListView {
   getTemplate() {
     return createFilmListTemplate();
   }
