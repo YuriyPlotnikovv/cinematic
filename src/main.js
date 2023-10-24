@@ -19,10 +19,14 @@ const siteStatisticsElement = siteFooterElement.querySelector(
 const filmsModel = new FilmsModel();
 const commentsModel = new CommentsModel(filmsModel);
 
-const filmPresenter = new FilmPresenter();
+const filmPresenter = new FilmPresenter(
+  siteMainElement,
+  filmsModel,
+  commentsModel
+);
 
 render(new HeaderProfileView(), siteHeaderElement);
 render(new FiltersView(), siteMainElement);
 render(new FooterStatisticView(), siteStatisticsElement);
 
-filmPresenter.init(siteMainElement, filmsModel, commentsModel);
+filmPresenter.init();
