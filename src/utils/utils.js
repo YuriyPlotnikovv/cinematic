@@ -29,6 +29,8 @@ const formatMinutesToTime = (minutes) => {
       }m`;
 };
 
+const getWatchingDate = () => {};
+
 export {
   getRandomInteger,
   getRandomValue,
@@ -36,4 +38,5 @@ export {
   formatStringToDate,
   formatStringToYear,
   formatMinutesToTime,
+  getWatchingDate,
 };

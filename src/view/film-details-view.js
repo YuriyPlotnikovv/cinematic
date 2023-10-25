@@ -1,8 +1,8 @@
-import { createElement } from '../render';
 import { createFilmDetailsInfoTemplate } from './film-details-info-template';
 import { createPopupButtonsTemplate } from './film-details-controls-template';
 import { createPopupCommentsTemplate } from './film-details-comments-template';
 import { createPopupNewCommentTemplate } from './film-details-new-comment-template';
+import AbstractView from '../framework/view/abstract-view';
 
 const createPopupTemplate = ({ filmInfo }, comments) =>
   `<section class="film-details">
@@ -34,12 +34,12 @@ const createPopupTemplate = ({ filmInfo }, comments) =>
     </section>
 `;
 
-export default class FilmDetailsView {
+export default class FilmDetailsView extends AbstractView {
   #film = null;
   #comments = null;
-  #element = null;
 
   constructor(film, comments) {
+    super();
     this.#film = film;
     this.#comments = comments;
   }
@@ -48,15 +48,15 @@ export default class FilmDetailsView {
     return createPopupTemplate(this.#film, this.#comments);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
+  setCloseButtonClickHandler(callback) {
+    this._callback.closeButtonClick = callback;
+    this.element
+      .querySelector('.film-details__close-btn')
+      .addEventListener('click', this.#closeButtonClickHandler);
   }
 
-  removeElement() {
-    this.#element = null;
-  }
+  #closeButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.closeButtonClick();
+  };
 }

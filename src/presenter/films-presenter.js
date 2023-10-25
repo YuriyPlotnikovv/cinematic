@@ -7,7 +7,7 @@ import FilmCardView from '../view/film-card-view';
 import FilmDetailsView from '../view/film-details-view';
 import FilmListEmptyView from '../view/film-list-empty-view';
 
-import { render } from '../render';
+import { render, remove } from '../framework/render';
 import { FILM_COUNT_PER_STEP } from '../const';
 
 export default class FilmPresenter {
@@ -57,15 +57,13 @@ export default class FilmPresenter {
 
     if (this.#films.length > FILM_COUNT_PER_STEP) {
       render(this.#buttonShowMoreComponent, this.#filmListComponent.element);
-      this.#buttonShowMoreComponent.element.addEventListener('click', (evt) =>
-        this.#filmButtonShowMoreClickHandler(evt)
+      this.#buttonShowMoreComponent.setButtonClickHandler(() =>
+        this.#filmButtonShowMoreClickHandler()
       );
     }
   }
 
-  #filmButtonShowMoreClickHandler(evt) {
-    evt.preventDefault();
-
+  #filmButtonShowMoreClickHandler() {
     this.#films
       .slice(
         this.#renderedFilmCount,
@@ -100,12 +98,7 @@ export default class FilmPresenter {
 
     this.#filmDetailsComponent = new FilmDetailsView(film, comments);
 
-    const closeButtonFilmDetailsElement =
-      this.#filmDetailsComponent.element.querySelector(
-        '.film-details__close-btn'
-      );
-
-    closeButtonFilmDetailsElement.addEventListener('click', () => {
+    this.#filmDetailsComponent.setCloseButtonClickHandler(() => {
       this.#removeFilmDetailsComponent();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     });
@@ -119,7 +112,7 @@ export default class FilmPresenter {
   };
 
   #removeFilmDetailsComponent = () => {
-    this.#filmDetailsComponent.element.remove();
+    remove(this.#filmDetailsComponent);
     this.#filmDetailsComponent = null;
     document.body.classList.remove('hide-overflow');
   };
