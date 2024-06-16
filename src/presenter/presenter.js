@@ -7,8 +7,7 @@ import FilmsContainerView from "../view/films-container";
 import FilmCardView from "../view/film-card";
 import ShowMoreButtonView from "../view/show-more-button";
 import DetailPopupView from "../view/detail-popup";
-
-import { render } from "../render";
+import { render } from "../framework/render";
 import { FILM_COUNT_PER_STEP } from "../const";
 
 export default class Presenter {
@@ -63,9 +62,8 @@ export default class Presenter {
     if (this.#films.length > FILM_COUNT_PER_STEP) {
       render(this.#showMoreButtonComponent, this.#filmsListComponent.element);
 
-      this.#showMoreButtonComponent.element.addEventListener(
-        "click",
-        this.#filmButtonShowMore
+      this.#showMoreButtonComponent.setClickHandler(() =>
+        this.#filmButtonShowMore()
       );
     }
   }
@@ -73,10 +71,7 @@ export default class Presenter {
   #renderFilm(film, container) {
     const filmCardComponent = new FilmCardView(film);
 
-    const openPopupLink =
-      filmCardComponent.element.querySelector(".film-card__link");
-
-    openPopupLink.addEventListener("click", () => {
+    filmCardComponent.setClickHandler(() => {
       this.#addPopupComponent(film);
       document.addEventListener("keydown", this.#onEscKeydown);
     });
@@ -91,13 +86,7 @@ export default class Presenter {
 
     render(this.#filmPopupComponent, this.#container.parentElement);
 
-    const closePopupLink = this.#filmPopupComponent.element.querySelector(
-      ".film-details__close-btn"
-    );
-
-    closePopupLink.addEventListener("click", this.#removePopupComponent, {
-      once: true,
-    });
+    this.#filmPopupComponent.setClickHandler(this.#removePopupComponent);
   }
 
   #filmButtonShowMore = () => {

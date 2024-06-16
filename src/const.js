@@ -1,4 +1,4 @@
-const FILM_COUNT = 17;
+const FILM_COUNT = 25;
 
 const NAME_COUNT = 2;
 
@@ -34,6 +34,18 @@ const YearsDuration = {
 const DaysDuration = {
   MIN: 0,
   MAX: 7,
+};
+
+const UserRankValue = {
+  NOVICE: 0,
+  FAN: 10,
+  MOVIE_BUFF: 20,
+};
+
+const UserRankTitle = {
+  NOVICE: "Novice",
+  FAN: "Fan",
+  MOVIE_BUFF: "Movie Buff",
 };
 
 const names = ["Sandy", "James", "John", "Rita", "Sofia", "Daniel"];
@@ -112,6 +124,8 @@ export {
   Runtime,
   YearsDuration,
   DaysDuration,
+  UserRankValue,
+  UserRankTitle,
   names,
   surnames,
   posters,

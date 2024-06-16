@@ -60,7 +60,6 @@ const generateFilms = () => {
       : 0;
 
     totalCommentsCount += filmCommentsCount;
-    // const booleanValue = Boolean(getRandomInteger(0, 1));
 
     return {
       id: String(index + 1),
@@ -68,12 +67,12 @@ const generateFilms = () => {
         String(totalCommentsCount - index)
       ),
       filmInfo: film,
-      // userDetails: {
-      //   watchList: booleanValue,
-      //   alreadyWatched: booleanValue,
-      //   watchingDate: booleanValue ? getDate("user") : null,
-      //   favorite: booleanValue,
-      // },
+      userDetails: {
+        watchList: Boolean(getRandomInteger(0, 1)),
+        alreadyWatched: Boolean(getRandomInteger(0, 1)),
+        watchingDate: Boolean(getRandomInteger(0, 1)) ? getDate("user") : null,
+        favorite: Boolean(getRandomInteger(0, 1)),
+      },
     };
   });
 };

@@ -6,17 +6,20 @@ import Presenter from "./presenter/presenter";
 import FilmsModel from "./model/filmsModel";
 import CommentsModel from "./model/commentsModel";
 
-import { render } from "./render";
+import { render } from "./framework/render";
 
 const headerContainer = document.querySelector(".header");
 const main = document.querySelector(".main");
 const footerContainer = document.querySelector(".footer__statistics");
+
 const filmsModel = new FilmsModel();
-const commentsModel = new CommentsModel(filmsModel);
+const films = filmsModel.get();
+
+const commentsModel = new CommentsModel(films);
 const presenter = new Presenter();
 
-render(new UserRankView(), headerContainer);
-render(new FiltersView(), main);
-render(new FooterStatisticsView(), footerContainer);
+render(new UserRankView(films), headerContainer);
+render(new FiltersView(films), main);
+render(new FooterStatisticsView(films.length), footerContainer);
 
 presenter.init(main, filmsModel, commentsModel);

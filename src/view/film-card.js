@@ -1,4 +1,4 @@
-import { createElement } from "../render.js";
+import AbstractView from "../framework/view/abstract-view.js";
 import { getTimeFormat } from "../utils/utils.js";
 
 const createTemplate = ({ filmInfo, comments }) => {
@@ -26,11 +26,12 @@ const createTemplate = ({ filmInfo, comments }) => {
       </article>`;
 };
 
-export default class FilmCardView {
+export default class FilmCardView extends AbstractView {
   #film = null;
-  #element = null;
+  _callback = [];
 
   constructor(film) {
+    super();
     this.#film = film;
   }
 
@@ -38,15 +39,15 @@ export default class FilmCardView {
     return createTemplate(this.#film);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
 
-    return this.#element;
-  }
+    this.element
+      .querySelector(".film-card__link")
+      .addEventListener("click", this.#clickHandler);
+  };
 
-  removeElement() {
-    this.#element = null;
-  }
+  #clickHandler = (evt) => {
+    this._callback.click();
+  };
 }

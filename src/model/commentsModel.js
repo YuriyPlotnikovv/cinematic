@@ -1,17 +1,17 @@
 import { generateComments } from "../mock/comments";
 
 export default class CommentsModel {
-  #filmsModel = null;
+  #films = null;
   #allComments = [];
   #comments = [];
 
-  constructor(filmsModel) {
-    this.#filmsModel = filmsModel;
+  constructor(films) {
+    this.#films = films;
     this.#generateAllComments();
   }
 
   #generateAllComments() {
-    this.#allComments = generateComments(this.#filmsModel.get());
+    this.#allComments = generateComments(this.#films);
   }
 
   get = (film) => {

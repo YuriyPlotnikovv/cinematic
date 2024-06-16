@@ -1,4 +1,4 @@
-import { createElement } from "../render.js";
+import AbstractView from "../framework/view/abstract-view.js";
 import { getTimeFormat } from "../utils/utils.js";
 
 const createTemplate = ({ filmInfo }, comments) => {
@@ -167,12 +167,13 @@ const createTemplate = ({ filmInfo }, comments) => {
     </section>`;
 };
 
-export default class DetailPopupView {
+export default class DetailPopupView extends AbstractView {
   #film = null;
   #comments = null;
-  #element = null;
+  _callback = [];
 
   constructor(film, comments) {
+    super();
     this.#film = film;
     this.#comments = comments;
   }
@@ -181,15 +182,15 @@ export default class DetailPopupView {
     return createTemplate(this.#film, this.#comments);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setClickHandler = (callback) => {
+    this._callback.click = callback;
 
-    return this.#element;
-  }
+    this.element
+      .querySelector(".film-details__close-btn")
+      .addEventListener("click", this.#clickHandler, { once: true });
+  };
 
-  removeElement() {
-    this.#element = null;
-  }
+  #clickHandler = (evt) => {
+    this._callback.click();
+  };
 }

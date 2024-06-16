@@ -1,4 +1,9 @@
-import { DaysDuration, YearsDuration } from "../const";
+import {
+  DaysDuration,
+  UserRankTitle,
+  UserRankValue,
+  YearsDuration,
+} from "../const";
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -54,6 +59,30 @@ const getTimeFormat = (minutes) => {
     : `${Math.floor(minutes / MINUTES_IN_HOUR)}h ${minutes % MINUTES_IN_HOUR}m`;
 };
 
+const getUserRank = (films) => {
+  const watchedFilmsCount = films.filter(
+    (film) => film.userDetails.alreadyWatched
+  ).length;
+
+  let userRank = null;
+
+  switch (true) {
+    case watchedFilmsCount > UserRankValue.MOVIE_BUFF:
+      userRank = UserRankTitle.MOVIE_BUFF;
+      break;
+    case watchedFilmsCount > UserRankValue.FAN:
+      userRank = UserRankTitle.FAN;
+      break;
+    case watchedFilmsCount > UserRankValue.NOVICE:
+      userRank = UserRankTitle.NOVICE;
+      break;
+    default:
+      userRank = null;
+  }
+
+  return userRank;
+};
+
 export {
   getRandomInteger,
   getRandomValue,
@@ -63,4 +92,5 @@ export {
   formatStringToDate,
   formatStringToYear,
   formatStringToDateWithTime,
+  getUserRank,
 };
