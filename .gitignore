@@ -1,16 +1,9 @@
-# Файлы и папки операционной системы
 .DS_Store
 Thumbs.db
 
-# Файлы редактора
 .idea
 *.sublime*
 .vscode
 
-# Вспомогательные файлы
 *.log*
 node_modules/
-markup/
-
-# Собранные файлы
-build/

@@ -1,30 +1,122 @@
-const FILM_COUNT = 37;
+const FILM_COUNT = 17;
+
+const NAME_COUNT = 2;
+
+const MAX_COMMENTS_ON_FILM = 5;
+
 const FILM_COUNT_PER_STEP = 5;
-const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
-const FILTER_TYPE_ALL_NAME = 'All movies';
-const FilterType = {
-  ALL: 'all',
-  WATCHLIST: 'whatchlist',
-  HISTORY: 'history',
-  FAVORITES: 'favorites',
+
+const GenreCount = {
+  MIN: 1,
+  MAX: 3,
 };
-const UserStatusValue = {
-  NOVICE: 0,
-  FAN: 10,
-  MOVIE_BUFF: 20,
+
+const Rating = {
+  MIN: 0,
+  MAX: 10,
 };
-const UserStatusTitle = {
-  NOVICE: 'Novice',
-  FAN: 'Fan',
-  MOVIE_BUFF: 'Movie Buff',
+
+const AgeRating = {
+  MIN: 0,
+  MAX: 18,
 };
+
+const Runtime = {
+  MIN: 60,
+  MAX: 180,
+};
+
+const YearsDuration = {
+  MIN: 5,
+  MAX: 10,
+};
+
+const DaysDuration = {
+  MIN: 0,
+  MAX: 7,
+};
+
+const names = ["Sandy", "James", "John", "Rita", "Sofia", "Daniel"];
+
+const surnames = ["Miller", "Fabias", "Rossini", "Loco", "Dakota", "Walker"];
+
+const titles = [
+  "Country On Him",
+  "Raiders With The Carpet",
+  "Guest Who Sold The Darkness",
+  "A Tale Of A Little Bird In The Storm",
+  "Friends On The Room",
+  "Raiders Who Stole Us",
+  "Friends Without Themselves",
+  "Pioneers Without Us",
+  "A Man With Themselves",
+  "Guest With The Darkness",
+  "A Little Pony Who Bought The Darkness",
+  "Family Who Bought The Carpet",
+  "Raiders Who Saw Him",
+  "Guest Within Him",
+  "Pioneers Without The Darkness",
+  "A Tale Of A Little Bird With Him",
+  "A Shark Who Sold The Wall",
+  "Raiders Who The Storm",
+  "Family Who Stole The Darkness",
+  "A Lion Without Us",
+];
+
+const posters = [
+  "made-for-each-other.png",
+  "popeye-meets-sinbad.png",
+  "sagebrush-trail.jpg",
+  "santa-claus-conquers-the-martians.jpg",
+  "the-dance-of-life.jpg",
+  "the-great-flamarion.jpg",
+  "the-man-with-the-golden-arm.jpg",
+];
+
+const genres = [
+  "Animation",
+  "Action",
+  "Adventure",
+  "Comedy",
+  "Family",
+  "Horror",
+  "Thriller",
+];
+
+const emotions = ["smile", "sleeping", "puke", "angry"];
+
+const text =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
+const countries = [
+  "USA",
+  "Russia",
+  "Germany",
+  "Finland",
+  "France",
+  "Spain",
+  "Italy",
+  "China",
+  "Japan",
+];
 
 export {
   FILM_COUNT,
+  NAME_COUNT,
+  MAX_COMMENTS_ON_FILM,
   FILM_COUNT_PER_STEP,
-  EMOTIONS,
-  FILTER_TYPE_ALL_NAME,
-  FilterType,
-  UserStatusValue,
-  UserStatusTitle,
+  titles,
+  GenreCount,
+  Rating,
+  AgeRating,
+  Runtime,
+  YearsDuration,
+  DaysDuration,
+  names,
+  surnames,
+  posters,
+  genres,
+  emotions,
+  text,
+  countries,
 };

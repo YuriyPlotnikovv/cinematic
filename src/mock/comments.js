@@ -1,36 +1,26 @@
-import { getRandomInteger, getRandomValue } from '../utils/utils.js';
-import { DaysDuration, names, surnames, emotions, comment } from './const.js';
-
-const getDate = () => {
-  const date = new Date();
-
-  date.setDate(
-    date.getDate() - getRandomInteger(DaysDuration.MIN, DaysDuration.MAX)
-  );
-
-  return date.toISOString();
-};
+import { emotions, names, surnames, text } from "../const";
+import {
+  formatStringToDateWithTime,
+  getDate,
+  getRandomInteger,
+  getRandomValue,
+} from "../utils/utils";
 
 const generateComment = () => ({
   author: `${getRandomValue(names)} ${getRandomValue(surnames)}`,
-  comment,
-  date: getDate(),
+  comment: text.slice(0, getRandomInteger(50, 150)),
+  date: formatStringToDateWithTime(getDate("user")),
   emotion: getRandomValue(emotions),
 });
 
-const getCommentCount = (films) =>
+const getCommentsCount = (films) =>
   films.reduce((count, film) => count + film.comments.length, 0);
 
 const generateComments = (films) => {
-  const commentCount = getCommentCount(films);
+  const commentsCount = getCommentsCount(films);
 
-  return Array.from({ length: commentCount }, (_value, index) => {
-    const commentItem = generateComment();
-
-    return {
-      id: String(index + 1),
-      ...commentItem,
-    };
+  return Array.from({ length: commentsCount }, (_value, index) => {
+    return { id: String(index + 1), ...generateComment() };
   });
 };
 

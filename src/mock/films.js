@@ -1,48 +1,31 @@
-import { getRandomInteger, getRandomValue } from '../utils/utils.js';
-import { FILM_COUNT } from '../const.js';
 import {
-  NAME_COUNT,
-  MAX_COMMENTS_ON_FILM,
-  GenreCount,
-  Rating,
+  formatStringToDate,
+  getDate,
+  getRandomFloat,
+  getRandomInteger,
+  getRandomValue,
+} from "../utils/utils";
+import {
   AgeRating,
+  FILM_COUNT,
+  GenreCount,
+  MAX_COMMENTS_ON_FILM,
+  NAME_COUNT,
+  Rating,
   Runtime,
-  YearsDuration,
-  DaysDuration,
-  DateType,
-  names,
-  surnames,
-  titles,
-  posters,
-  genres,
-  description,
   countries,
-} from './const.js';
-
-const getDate = (type) => {
-  const date = new Date();
-
-  switch (type) {
-    case DateType.FILM_INFO:
-      date.setFullYear(
-        date.getFullYear() -
-          getRandomInteger(YearsDuration.MIN, YearsDuration.MAX)
-      );
-      break;
-    case DateType.USER_DETAILS:
-      date.setDate(
-        date.getDate() - getRandomInteger(DaysDuration.MIN, DaysDuration.MAX)
-      );
-      break;
-  }
-
-  return date.toISOString();
-};
+  genres,
+  names,
+  posters,
+  surnames,
+  text,
+  titles,
+} from "../const";
 
 const generateFilm = () => ({
   title: getRandomValue(titles),
   alternativeTitle: getRandomValue(titles),
-  totalRating: getRandomInteger(Rating.MIN, Rating.MAX),
+  totalRating: getRandomFloat(Rating.MIN, Rating.MAX),
   poster: getRandomValue(posters),
   ageRating: getRandomInteger(AgeRating.MIN, AgeRating.MAX),
   director: `${getRandomValue(names)} ${getRandomValue(surnames)}`,
@@ -55,49 +38,42 @@ const generateFilm = () => ({
     () => `${getRandomValue(names)} ${getRandomValue(surnames)}`
   ),
   release: {
-    date: getDate(DateType.FILM_INFO),
-    releaseСountry: getRandomValue(countries),
+    date: formatStringToDate(getDate("film")),
+    releaseCountry: getRandomValue(countries),
   },
   runtime: getRandomInteger(Runtime.MIN, Runtime.MAX),
   genre: Array.from(
     { length: getRandomInteger(GenreCount.MIN, GenreCount.MAX) },
     () => getRandomValue(genres)
   ),
-  description,
+  description: text.slice(0, getRandomInteger(200, 400)),
 });
 
 const generateFilms = () => {
   const films = Array.from({ length: FILM_COUNT }, generateFilm);
-
   let totalCommentsCount = 0;
-
-  const getWatchingDate = () => getDate(DateType.USER_DETAILS);
 
   return films.map((film, index) => {
     const hasComments = getRandomInteger(0, 1);
-
     const filmCommentsCount = hasComments
       ? getRandomInteger(1, MAX_COMMENTS_ON_FILM)
       : 0;
 
     totalCommentsCount += filmCommentsCount;
-
-    const alreadyWatched = Boolean(getRandomInteger(0, 1));
+    // const booleanValue = Boolean(getRandomInteger(0, 1));
 
     return {
       id: String(index + 1),
-      comments: hasComments
-        ? Array.from({ length: filmCommentsCount }, (_value, commentIndex) =>
-            String(totalCommentsCount - commentIndex)
-          )
-        : [],
+      comments: Array.from({ length: filmCommentsCount }, (_value, index) =>
+        String(totalCommentsCount - index)
+      ),
       filmInfo: film,
-      userDetails: {
-        watchList: Boolean(getRandomInteger(0, 1)),
-        alreadyWatched,
-        watchingDate: alreadyWatched ? getWatchingDate() : null,
-        favorite: Boolean(getRandomInteger(0, 1)),
-      },
+      // userDetails: {
+      //   watchList: booleanValue,
+      //   alreadyWatched: booleanValue,
+      //   watchingDate: booleanValue ? getDate("user") : null,
+      //   favorite: booleanValue,
+      // },
     };
   });
 };
