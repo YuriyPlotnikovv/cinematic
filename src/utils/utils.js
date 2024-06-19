@@ -93,6 +93,21 @@ const updateItem = (items, update) => {
   return [...items.slice(0, index), update, ...items.slice(index + 1)];
 };
 
+const sortingByDefaut = (first, second) => {
+  return second.id - first.id;
+};
+
+const sortingByDate = (first, second) => {
+  return (
+    new Date(second.filmInfo.release.date) -
+    new Date(first.filmInfo.release.date)
+  );
+};
+
+const sortingByRate = (first, second) => {
+  return second.filmInfo.totalRating - first.filmInfo.totalRating;
+};
+
 export {
   getRandomInteger,
   getRandomValue,
@@ -104,4 +119,7 @@ export {
   formatStringToDateWithTime,
   getUserRank,
   updateItem,
+  sortingByDefaut,
+  sortingByDate,
+  sortingByRate,
 };

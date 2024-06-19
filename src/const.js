@@ -48,6 +48,12 @@ const UserRankTitle = {
   MOVIE_BUFF: "Movie Buff",
 };
 
+const SortingType = {
+  DEFAULT: "default",
+  DATE: "date",
+  RATING: "rating",
+};
+
 const names = ["Sandy", "James", "John", "Rita", "Sofia", "Daniel"];
 
 const surnames = ["Miller", "Fabias", "Rossini", "Loco", "Dakota", "Walker"];
@@ -126,6 +132,7 @@ export {
   DaysDuration,
   UserRankValue,
   UserRankTitle,
+  SortingType,
   names,
   surnames,
   posters,

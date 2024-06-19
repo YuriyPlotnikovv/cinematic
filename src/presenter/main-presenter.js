@@ -5,14 +5,19 @@ import FilmsListEmptyTitleView from "../view/films-list-empty-title";
 import FilmsListTitleView from "../view/films-list-title";
 import FilmsContainerView from "../view/films-container";
 import ShowMoreButtonView from "../view/show-more-button";
-import { render } from "../framework/render";
-import { FILM_COUNT_PER_STEP } from "../const";
+import { render, remove, replace } from "../framework/render";
+import { FILM_COUNT_PER_STEP, SortingType } from "../const";
 import FilmPresenter from "./film-presenter";
 import FilmPopupPresenter from "./film-popup-presenter";
-import { updateItem } from "../utils/utils";
+import {
+  sortingByDate,
+  sortingByDefaut,
+  sortingByRate,
+  updateItem,
+} from "../utils/utils";
 
 export default class MainPresenter {
-  #sortingComponent = new SortingView();
+  #sortingComponent = null;
   #filmsComponent = new FilmsView();
   #filmsListComponent = new FilmsListView();
   #filmsListTitleComponent = new FilmsListTitleView();
@@ -27,6 +32,7 @@ export default class MainPresenter {
   #commentsModel = null;
   #films = [];
   #selectedFilm = null;
+  #selectedSorting = SortingType.DEFAULT;
 
   #renderedFilmCount = FILM_COUNT_PER_STEP;
 
@@ -45,7 +51,7 @@ export default class MainPresenter {
   #renderBoard() {
     this.#renderSorting(this.#container);
     this.#renderFilmsSection(this.#container);
-    this.#renderFilmsList(this.#filmsComponent.element);
+    this.#renderFilmsListSection(this.#filmsComponent.element);
 
     if (this.#films.length === 0) {
       this.#renderFilmsListTitle(
@@ -61,26 +67,54 @@ export default class MainPresenter {
 
     this.#renderFilmsContainer(this.#filmsListComponent.element);
 
-    this.#renderFilms(
-      0,
-      Math.min(this.#films.length, this.#renderedFilmCount),
-      this.#filmsContainerComponent
-    );
-
-    if (this.#films.length > FILM_COUNT_PER_STEP) {
-      this.#filmButtonShowMore(this.#filmsListComponent.element);
-    }
+    this.#renderFilmsList();
   }
 
+  #sortingFilms = (sortingType) => {
+    switch (sortingType) {
+      case SortingType.DATE:
+        this.#films.sort(sortingByDate);
+        break;
+      case SortingType.RATING:
+        this.#films.sort(sortingByRate);
+        break;
+      default:
+        this.#films.sort(sortingByDefaut);
+        break;
+    }
+
+    this.#selectedSorting = sortingType;
+  };
+
+  #sortingChangeHandler = (sortingType) => {
+    if (this.#selectedSorting === sortingType) {
+      return;
+    }
+
+    this.#sortingFilms(sortingType);
+    this.#clearFilmsList();
+    this.#renderSorting(this.#container);
+    this.#renderFilmsList();
+  };
+
   #renderSorting(container) {
-    render(this.#sortingComponent, container);
+    if (!this.#sortingComponent) {
+      this.#sortingComponent = new SortingView(this.#selectedSorting);
+      render(this.#sortingComponent, container);
+    } else {
+      const updatedSortingComponent = new SortingView(this.#selectedSorting);
+      replace(updatedSortingComponent, this.#sortingComponent);
+      this.#sortingComponent = updatedSortingComponent;
+    }
+
+    this.#sortingComponent.setSortingChangeHandler(this.#sortingChangeHandler);
   }
 
   #renderFilmsSection(container) {
     render(this.#filmsComponent, container);
   }
 
-  #renderFilmsList(container) {
+  #renderFilmsListSection(container) {
     render(this.#filmsListComponent, container);
   }
 
@@ -90,6 +124,18 @@ export default class MainPresenter {
 
   #renderFilmsContainer(container) {
     render(this.#filmsContainerComponent, container);
+  }
+
+  #renderFilmsList() {
+    this.#renderFilms(
+      0,
+      Math.min(this.#films.length, this.#renderedFilmCount),
+      this.#filmsContainerComponent
+    );
+
+    if (this.#films.length > FILM_COUNT_PER_STEP) {
+      this.#filmButtonShowMore(this.#filmsListComponent.element);
+    }
   }
 
   #renderFilms(min, max, container) {
@@ -161,6 +207,13 @@ export default class MainPresenter {
     this.#selectedFilm = null;
     document.removeEventListener("keydown", this.#onEscKeydown);
     document.body.classList.remove("hide-overflow");
+  };
+
+  #clearFilmsList = () => {
+    this.#filmPresenter.forEach((presenter) => presenter.destroy());
+    this.#filmPresenter.clear();
+    this.#renderedFilmCount = FILM_COUNT_PER_STEP;
+    remove(this.#showMoreButtonComponent);
   };
 
   #filmChangeHandler = (update) => {
