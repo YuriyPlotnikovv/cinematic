@@ -2,7 +2,7 @@ import UserRankView from "./view/user-rank";
 import FiltersView from "./view/filters";
 import FooterStatisticsView from "./view/footer-statistics";
 
-import Presenter from "./presenter/presenter";
+import MainPresenter from "./presenter/main-presenter";
 import FilmsModel from "./model/filmsModel";
 import CommentsModel from "./model/commentsModel";
 
@@ -16,10 +16,10 @@ const filmsModel = new FilmsModel();
 const films = filmsModel.get();
 
 const commentsModel = new CommentsModel(films);
-const presenter = new Presenter();
+const mainPresenter = new MainPresenter(main, filmsModel, commentsModel);
 
 render(new UserRankView(films), headerContainer);
 render(new FiltersView(films), main);
 render(new FooterStatisticsView(films.length), footerContainer);
 
-presenter.init(main, filmsModel, commentsModel);
+mainPresenter.init();
