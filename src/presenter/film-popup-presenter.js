@@ -8,6 +8,11 @@ export default class FilmPopupPresenter {
   #filmPopupComponent = null;
   #closePopupClickHandler = null;
   #filmChangeHandler = null;
+  #viewData = {
+    emotion: null,
+    comment: null,
+    scrollPosition: 0,
+  };
 
   constructor(container, closePopupClickHandler, filmChangeHandler) {
     this.#container = container;
@@ -19,7 +24,12 @@ export default class FilmPopupPresenter {
     this.#film = film;
     this.#comments = comments;
     const prevFilmPopupComponent = this.#filmPopupComponent;
-    this.#filmPopupComponent = new DetailPopupView(this.#film, this.#comments);
+    this.#filmPopupComponent = new DetailPopupView(
+      this.#film,
+      this.#comments,
+      this.#viewData,
+      this.#updateViewData
+    );
 
     this.#filmPopupComponent.setCloseClickHandler(this.#closePopupClickHandler);
     this.#filmPopupComponent.setWatchListClickHandler(
@@ -38,6 +48,8 @@ export default class FilmPopupPresenter {
     }
 
     replace(this.#filmPopupComponent, prevFilmPopupComponent);
+
+    this.#filmPopupComponent.setScrollPosition();
 
     remove(prevFilmPopupComponent);
   };
@@ -70,6 +82,10 @@ export default class FilmPopupPresenter {
         favorite: !this.#film.userDetails.favorite,
       },
     });
+  };
+
+  #updateViewData = (viewData) => {
+    this.#viewData = { ...viewData };
   };
 
   destroy = () => {
