@@ -1,3 +1,9 @@
+import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
+
 import {
   DaysDuration,
   UserRankTitle,
@@ -20,16 +26,11 @@ const getRandomFloat = (a = 0, b = 1) => {
 };
 
 const formatStringToDateWithTime = (date) =>
-  new Date(date).toLocaleString("en-GB");
+  dayjs(date).format("YYYY/MM/DD HH:mm");
 
-const formatStringToDate = (date) =>
-  new Date(date).toLocaleString("en-GB", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+const formatStringToDate = (date) => dayjs(date).format("DD MMMM YYYY");
 
-const formatStringToYear = (date) => new Date(date).getFullYear();
+const formatStringToYear = (date) => dayjs(date).format("YYYY");
 
 const getDate = (type) => {
   const date = new Date();
@@ -51,12 +52,12 @@ const getDate = (type) => {
   return date.toISOString();
 };
 
-const getTimeFormat = (minutes) => {
-  const MINUTES_IN_HOUR = 60;
+const getTimeFormat = (minutes) =>
+  dayjs.duration(minutes, "m").format("H[h] mm[m]");
 
-  return minutes < MINUTES_IN_HOUR
-    ? `${minutes}m`
-    : `${Math.floor(minutes / MINUTES_IN_HOUR)}h ${minutes % MINUTES_IN_HOUR}m`;
+const getDateDuration = (date) => {
+  const diff = dayjs(date).diff(dayjs());
+  return dayjs.duration(diff).humanize(true);
 };
 
 const getUserRank = (films) => {
@@ -98,10 +99,7 @@ const sortingByDefaut = (first, second) => {
 };
 
 const sortingByDate = (first, second) => {
-  return (
-    new Date(second.filmInfo.release.date) -
-    new Date(first.filmInfo.release.date)
-  );
+  return dayjs(second.filmInfo.release.date).diff(first.filmInfo.release.date);
 };
 
 const sortingByRate = (first, second) => {
@@ -114,6 +112,7 @@ export {
   getRandomFloat,
   getDate,
   getTimeFormat,
+  getDateDuration,
   formatStringToDate,
   formatStringToYear,
   formatStringToDateWithTime,
