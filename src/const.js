@@ -6,6 +6,8 @@ const MAX_COMMENTS_ON_FILM = 5;
 
 const FILM_COUNT_PER_STEP = 5;
 
+const FILTER_TYPE_ALL_NAME = "All movies";
+
 const GenreCount = {
   MIN: 1,
   MAX: 3,
@@ -52,6 +54,35 @@ const SortingType = {
   DEFAULT: "default",
   DATE: "date",
   RATING: "rating",
+};
+
+const UserAction = {
+  UPDATE_FILM: "UPDATE_FILM",
+  ADD_COMMENT: "ADD_COMMENT",
+  DELETE_COMMENT: "DELETE_COMMENT",
+};
+
+const UpdateType = {
+  PATCH: "PATCH",
+  MINOR: "MINOR",
+  MAJOR: "MAJOR",
+};
+
+const FilterType = {
+  ALL: "all",
+  WATCHLIST: "watchlist",
+  HISTORY: "history",
+  FAVORITES: "favorites",
+};
+
+const filter = {
+  [FilterType.ALL]: (films) => [...films],
+  [FilterType.WATCHLIST]: (films) =>
+    films.filter((film) => film.userDetails.watchList),
+  [FilterType.HISTORY]: (films) =>
+    films.filter((film) => film.userDetails.alreadyWatched),
+  [FilterType.FAVORITES]: (films) =>
+    films.filter((film) => film.userDetails.favorite),
 };
 
 const names = ["Sandy", "James", "John", "Rita", "Sofia", "Daniel"];
@@ -123,6 +154,7 @@ export {
   NAME_COUNT,
   MAX_COMMENTS_ON_FILM,
   FILM_COUNT_PER_STEP,
+  FILTER_TYPE_ALL_NAME,
   titles,
   GenreCount,
   Rating,
@@ -133,6 +165,10 @@ export {
   UserRankValue,
   UserRankTitle,
   SortingType,
+  UserAction,
+  UpdateType,
+  FilterType,
+  filter,
   names,
   surnames,
   posters,

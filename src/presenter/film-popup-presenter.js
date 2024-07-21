@@ -1,5 +1,7 @@
+import { nanoid } from "nanoid";
 import { render, replace, remove } from "../framework/render";
 import DetailPopupView from "../view/detail-popup";
+import { UpdateType, UserAction } from "../const";
 
 export default class FilmPopupPresenter {
   #container = null;
@@ -23,7 +25,9 @@ export default class FilmPopupPresenter {
   init = (film, comments) => {
     this.#film = film;
     this.#comments = comments;
+
     const prevFilmPopupComponent = this.#filmPopupComponent;
+
     this.#filmPopupComponent = new DetailPopupView(
       this.#film,
       this.#comments,
@@ -41,6 +45,9 @@ export default class FilmPopupPresenter {
     this.#filmPopupComponent.setFavoriteClickHandler(
       this.#favoriteButtonClickHandler
     );
+    this.#filmPopupComponent.setCommentDeleteClickHandler(
+      this.#commentDeleteClickHandler
+    );
 
     if (prevFilmPopupComponent === null) {
       render(this.#filmPopupComponent, this.#container.parentElement);
@@ -54,8 +61,44 @@ export default class FilmPopupPresenter {
     remove(prevFilmPopupComponent);
   };
 
+  clearViewData = () => {
+    this.#updateViewData({
+      comment: null,
+      emotion: null,
+      scrollPosition: this.#viewData.scrollPosition,
+    });
+  };
+
+  createComment = () => {
+    this.#filmPopupComponent.setCommentData();
+
+    const { emotion, comment } = this.#viewData;
+
+    if (emotion && comment) {
+      const newCommentId = nanoid();
+
+      const createdComment = {
+        id: newCommentId,
+        author: "Unknow Raccoon",
+        date: new Date(),
+        emotion,
+        comment,
+      };
+
+      this.#filmChangeHandler(
+        UserAction.ADD_COMMENT,
+        UpdateType.PATCH,
+        {
+          ...this.#film,
+          comments: [...this.#film.comments, newCommentId],
+        },
+        createdComment
+      );
+    }
+  };
+
   #watchListButtonClickHandler = () => {
-    this.#filmChangeHandler({
+    this.#filmChangeHandler(UserAction.UPDATE_FILM, UpdateType.PATCH, {
       ...this.#film,
       userDetails: {
         ...this.#film.userDetails,
@@ -65,7 +108,7 @@ export default class FilmPopupPresenter {
   };
 
   #alreadyWatchedButtonClickHandler = () => {
-    this.#filmChangeHandler({
+    this.#filmChangeHandler(UserAction.UPDATE_FILM, UpdateType.PATCH, {
       ...this.#film,
       userDetails: {
         ...this.#film.userDetails,
@@ -75,7 +118,7 @@ export default class FilmPopupPresenter {
   };
 
   #favoriteButtonClickHandler = () => {
-    this.#filmChangeHandler({
+    this.#filmChangeHandler(UserAction.UPDATE_FILM, UpdateType.PATCH, {
       ...this.#film,
       userDetails: {
         ...this.#film.userDetails,
@@ -86,6 +129,29 @@ export default class FilmPopupPresenter {
 
   #updateViewData = (viewData) => {
     this.#viewData = { ...viewData };
+  };
+
+  #commentDeleteClickHandler = (commentId) => {
+    const filmCommentIdIndex = this.#film.comments.findIndex(
+      (filmCommentId) => filmCommentId === commentId
+    );
+
+    const deletedComment = this.#comments.find(
+      (comment) => comment.id === commentId
+    );
+
+    this.#filmChangeHandler(
+      UserAction.DELETE_COMMENT,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        comments: [
+          ...this.#film.comments.slice(0, filmCommentIdIndex),
+          ...this.#film.comments.slice(filmCommentIdIndex + 1),
+        ],
+      },
+      deletedComment
+    );
   };
 
   destroy = () => {

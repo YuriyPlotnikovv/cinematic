@@ -1,5 +1,6 @@
 import AbstractStatefulView from "../framework/view/abstract-stateful-view.js";
 import { getDateDuration, getTimeFormat } from "../utils/utils.js";
+import he from "he";
 
 const createTemplate = ({
   filmInfo,
@@ -44,7 +45,9 @@ const createTemplate = ({
                   }.png" width="55" height="55" alt="emoji-smile">
                 </span>
                 <div>
-                  <p class="film-details__comment-text">${item.comment}</p>
+                  <p class="film-details__comment-text">${he.encode(
+                    item.comment
+                  )}</p>
                   <p class="film-details__comment-info">
                     <span class="film-details__comment-author">${
                       item.author
@@ -52,7 +55,9 @@ const createTemplate = ({
                     <span class="film-details__comment-day">${getDateDuration(
                       item.date
                     )}</span>
-                    <button class="film-details__comment-delete">Delete</button>
+                    <button class="film-details__comment-delete" data-comment-id=${
+                      item.id
+                    }>Delete</button>
                   </p>
                 </div>
               </li>`
@@ -227,6 +232,7 @@ export default class DetailPopupView extends AbstractStatefulView {
     this.setWatchListClickHandler(this._callback.watchingListClick);
     this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
     this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.setCommentDeleteClickHandler(this._callback.commentDeleteClick);
   };
 
   static convertFilmToState = (
@@ -242,6 +248,10 @@ export default class DetailPopupView extends AbstractStatefulView {
     comment,
     scrollPosition,
   });
+
+  setCommentData = () => {
+    this.#updateViewData();
+  };
 
   setScrollPosition = () => {
     this.element.scrollTop = this._state.scrollPosition;
@@ -279,6 +289,19 @@ export default class DetailPopupView extends AbstractStatefulView {
       .addEventListener("click", this.#favoriteClickHandler);
   }
 
+  setCommentDeleteClickHandler(callback) {
+    const commentDeleteElements = this.element.querySelectorAll(
+      ".film-details__comment-delete"
+    );
+
+    if (commentDeleteElements) {
+      this._callback.commentDeleteClick = callback;
+      commentDeleteElements.forEach((element) =>
+        element.addEventListener("click", this.#commentDeleteClickHandler)
+      );
+    }
+  }
+
   #closeClickHandler = (evt) => {
     this._callback.closeClick();
   };
@@ -308,6 +331,12 @@ export default class DetailPopupView extends AbstractStatefulView {
 
   #commentInputChangeHandler = (evt) => {
     this._setState({ comment: evt.target.value });
+  };
+
+  #commentDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#updateViewData();
+    this._callback.commentDeleteClick(evt.target.dataset.commentId);
   };
 
   #setHandlers = () => {

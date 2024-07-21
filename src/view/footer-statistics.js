@@ -7,9 +7,9 @@ const createTemplate = (filmsLength) => {
 export default class FooterStatisticsView extends AbstractView {
   #filmsLength = null;
 
-  constructor(filmsLength) {
+  constructor(filmsModel) {
     super();
-    this.#filmsLength = filmsLength;
+    this.#filmsLength = filmsModel.get().length;
   }
 
   get template() {

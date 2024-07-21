@@ -1,3 +1,4 @@
+import { UpdateType, UserAction } from "../const";
 import { render, replace, remove } from "../framework/render";
 import FilmCardView from "../view/film-card";
 
@@ -55,7 +56,7 @@ export default class FilmPresenter {
   };
 
   #watchListButtonClickHandler = () => {
-    this.#filmChangeHandler({
+    this.#filmChangeHandler(UserAction.UPDATE_FILM, UpdateType.PATCH, {
       ...this.#film,
       userDetails: {
         ...this.#film.userDetails,
@@ -65,7 +66,7 @@ export default class FilmPresenter {
   };
 
   #alreadyWatchedButtonClickHandler = () => {
-    this.#filmChangeHandler({
+    this.#filmChangeHandler(UserAction.UPDATE_FILM, UpdateType.PATCH, {
       ...this.#film,
       userDetails: {
         ...this.#film.userDetails,
@@ -75,7 +76,7 @@ export default class FilmPresenter {
   };
 
   #favoriteButtonClickHandler = () => {
-    this.#filmChangeHandler({
+    this.#filmChangeHandler(UserAction.UPDATE_FILM, UpdateType.PATCH, {
       ...this.#film,
       userDetails: {
         ...this.#film.userDetails,
