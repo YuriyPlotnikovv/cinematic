@@ -82,7 +82,7 @@ export default class FilmPopupPresenter {
 
       const createdComment = {
         id: newCommentId,
-        author: "Unknow Raccoon",
+        author: 'Unknow Raccoon',
         date: new Date(),
         emotion,
         comment,
@@ -105,7 +105,7 @@ export default class FilmPopupPresenter {
       ...this.#film,
       userDetails: {
         ...this.#film.userDetails,
-        watchList: !this.#film.userDetails.watchList,
+        watchlist: !this.#film.userDetails.watchlist,
       },
     });
   };

@@ -68,7 +68,7 @@ const generateFilms = () => {
       ),
       filmInfo: film,
       userDetails: {
-        watchList: Boolean(getRandomInteger(0, 1)),
+        watchlist: Boolean(getRandomInteger(0, 1)),
         alreadyWatched: Boolean(getRandomInteger(0, 1)),
         watchingDate: Boolean(getRandomInteger(0, 1)) ? getDate("user") : null,
         favorite: Boolean(getRandomInteger(0, 1)),

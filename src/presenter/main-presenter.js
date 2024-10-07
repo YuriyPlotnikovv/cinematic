@@ -1,15 +1,15 @@
-import SortingView from "../view/sorting";
-import FilmsView from "../view/films";
-import FilmsListView from "../view/films-list";
-import FilmsListEmptyTitleView from "../view/films-list-empty-title";
-import FilmsListTitleView from "../view/films-list-title";
-import FilmsContainerView from "../view/films-container";
-import ShowMoreButtonView from "../view/show-more-button";
+import SortingView from '../view/sorting';
+import FilmsView from '../view/films';
+import FilmsListView from '../view/films-list';
+import FilmsListEmptyTitleView from '../view/films-list-empty-title';
+import FilmsListTitleView from '../view/films-list-title';
+import FilmsContainerView from '../view/films-container';
+import ShowMoreButtonView from '../view/show-more-button';
 
-import FilmPresenter from "./film-presenter";
-import FilmPopupPresenter from "./film-popup-presenter";
+import FilmPresenter from './film-presenter';
+import FilmPopupPresenter from './film-popup-presenter';
 
-import { render, remove, replace } from "../framework/render";
+import { render, remove, replace } from '../framework/render';
 import {
   FILM_COUNT_PER_STEP,
   FilterType,
@@ -17,8 +17,8 @@ import {
   UpdateType,
   UserAction,
   filter,
-} from "../const";
-import { sortingByDate, sortingByRate } from "../utils/utils";
+} from '../const';
+import { sortingByDate, sortingByRate } from '../utils/utils';
 
 export default class MainPresenter {
   #sortingComponent = null;
@@ -40,6 +40,7 @@ export default class MainPresenter {
   #selectedSorting = SortingType.DEFAULT;
 
   #renderedFilmCount = FILM_COUNT_PER_STEP;
+  #isloading = true;
 
   constructor(container, filmsModel, commentsModel, filterModel) {
     this.#container = container;
@@ -59,8 +60,10 @@ export default class MainPresenter {
     switch (this.#selectedSorting) {
       case SortingType.DATE:
         filteredFilms.sort(sortingByDate);
+        break;
       case SortingType.RATING:
         filteredFilms.sort(sortingByRate);
+        break;
     }
 
     return filteredFilms;
@@ -98,7 +101,7 @@ export default class MainPresenter {
           this.#renderFilmPopup();
         }
         if (this.#filterModel.get() !== FilterType.ALL) {
-          this, this.#modelEventHandler(UpdateType.MINOR);
+          this.#modelEventHandler(UpdateType.MINOR);
         }
         break;
       case UpdateType.MINOR:
@@ -110,6 +113,7 @@ export default class MainPresenter {
         this.#renderBoard();
         break;
       case UpdateType.INIT:
+        this.#isloading = false;
         this.#renderBoard();
         break;
     }
@@ -124,13 +128,12 @@ export default class MainPresenter {
       0,
       Math.min(this.films.length, FILM_COUNT_PER_STEP)
     );
-
-    if (films.length === 0) {
+    if (!this.#isloading && films.length === 0) {
       this.#renderFilmsListTitle(
         this.#filmsListEmptyTitleComponent,
         this.#filmsListComponent.element
       );
-    } else {
+    } else if (this.#isloading) {
       this.#renderFilmsListTitle(
         this.#filmsListTitleComponent,
         this.#filmsListComponent.element
@@ -227,7 +230,7 @@ export default class MainPresenter {
     }
 
     if (!commentsLoadingError) {
-      document.addEventListener("keydown", this.#onCtrlEnterKeydown);
+      document.addEventListener('keydown', this.#onCtrlEnterKeydown);
     }
 
     this.#filmPopupPresenter.init(
@@ -278,7 +281,7 @@ export default class MainPresenter {
 
     this.#selectedFilm = film;
     this.#renderFilmPopup();
-    document.body.classList.add("hide-overflow");
+    document.body.classList.add('hide-overflow');
   };
 
   #closePopupComponent = () => {
@@ -286,10 +289,10 @@ export default class MainPresenter {
     this.#filmPopupPresenter = null;
     this.#selectedFilm = null;
 
-    document.removeEventListener("keydown", this.#onEscKeydown);
-    document.removeEventListener("keydown", this.#onCtrlEnterKeydown);
+    document.removeEventListener('keydown', this.#onEscKeydown);
+    document.removeEventListener('keydown', this.#onCtrlEnterKeydown);
 
-    document.body.classList.remove("hide-overflow");
+    document.body.classList.remove('hide-overflow');
   };
 
   #clearFilmsList = () => {
@@ -319,13 +322,13 @@ export default class MainPresenter {
   };
 
   #onEscKeydown = (evt) => {
-    if (evt.key === "Escape" || evt.key === "Esc") {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
       this.#closePopupComponent();
     }
   };
 
   #onCtrlEnterKeydown = (evt) => {
-    if (evt.key === "Enter" && (evt.metaKey || evt.ctrlKey)) {
+    if (evt.key === 'Enter' && (evt.metaKey || evt.ctrlKey)) {
       evt.preventDefault();
       this.#filmPopupPresenter.createComment();
     }

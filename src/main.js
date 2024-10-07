@@ -1,41 +1,40 @@
-import UserRankView from "./view/user-rank";
-import FooterStatisticsView from "./view/footer-statistics";
+import UserRankPresenter from './presenter/user-rank-presenter';
+import MainPresenter from './presenter/main-presenter';
+import FiltersPresenter from './presenter/filters-presenter';
+import FooterStatisticsPresenter from './presenter/footer-statistics-presenter';
 
-import MainPresenter from "./presenter/main-presenter";
-import FiltersPresenter from "./presenter/filters-presenter";
+import FilmsModel from './model/filmsModel';
+import CommentsModel from './model/commentsModel';
+import FilterModel from './model/filterModel';
 
-import FilmsModel from "./model/filmsModel";
-import CommentsModel from "./model/commentsModel";
+import FilmsApi from './api-services/films-api';
+import CommentsApi from './api-services/comments-api';
 
-import { render } from "./framework/render";
-import FilterModel from "./model/filterModel";
-import FilmsApi from "./api-services/films-api";
-import CommentsApi from "./api-services/comments-api";
+const AUTHORIZATION = 'Basic asD6KnjA33Sg2b3sj4B';
+const END_POINT = 'https://17.ecmascript.htmlacademy.pro/cinemaddict';
 
-const AUTORIZATION = "Basic asD6KnjA33Sg2b3sj4B";
-const END_POINT = "https://17.ecmascript.htmlacademy.pro/cinemaddict";
+const headerContainer = document.querySelector('.header');
+const mainContainer = document.querySelector('.main');
+const footerContainer = document.querySelector('.footer__statistics');
 
-const headerContainer = document.querySelector(".header");
-const main = document.querySelector(".main");
-const footerContainer = document.querySelector(".footer__statistics");
-
-const filmsModel = new FilmsModel(new FilmsApi(END_POINT, AUTORIZATION));
+const filmsModel = new FilmsModel(new FilmsApi(END_POINT, AUTHORIZATION));
 const commentsModel = new CommentsModel(
-  new CommentsApi(END_POINT, AUTORIZATION)
+  new CommentsApi(END_POINT, AUTHORIZATION)
 );
 const filterModel = new FilterModel();
 
+const userRankPresenter = new UserRankPresenter(headerContainer, filmsModel);
+const footerStatisticsPresenter = new FooterStatisticsPresenter(footerContainer, filmsModel);
 const mainPresenter = new MainPresenter(
-  main,
+  mainContainer,
   filmsModel,
   commentsModel,
   filterModel
 );
-const filtersPresenter = new FiltersPresenter(main, filmsModel, filterModel);
+const filtersPresenter = new FiltersPresenter(mainContainer, filmsModel, filterModel);
 
-render(new UserRankView(filmsModel), headerContainer);
-render(new FooterStatisticsView(filmsModel), footerContainer);
-
+userRankPresenter.init();
+footerStatisticsPresenter.init();
 filtersPresenter.init();
 mainPresenter.init();
 filmsModel.init();

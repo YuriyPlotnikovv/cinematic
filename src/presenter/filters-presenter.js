@@ -1,7 +1,7 @@
-import { FilterType, filter, UpdateType } from "../const";
-import Observable from "../framework/observable";
-import { render, replace, remove } from "../framework/render";
-import FiltersView from "../view/filters";
+import { FilterType, filter, UpdateType } from '../const';
+import Observable from '../framework/observable';
+import { render, replace, remove } from '../framework/render';
+import FiltersView from '../view/filters';
 
 export default class FiltersPresenter extends Observable {
   #container = null;

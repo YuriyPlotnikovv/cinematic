@@ -1,9 +1,7 @@
-import Observable from "../framework/observable";
-import { generateComments } from "../mock/comments";
+import Observable from '../framework/observable';
 
 export default class CommentsModel extends Observable {
   #apiService = null;
-  #allComments = [];
   #comments = [];
 
   constructor(apiService) {
@@ -17,22 +15,22 @@ export default class CommentsModel extends Observable {
   };
 
   add = (updateType, update) => {
-    this.#allComments.push(update);
+    this.#comments.push(update);
     this._notify(updateType, update);
   };
 
   delete = (updateType, update) => {
-    const index = this.#allComments.findIndex(
+    const index = this.#comments.findIndex(
       (comment) => comment.id === update.id
     );
 
     if (index === -1) {
-      throw new Error("Невозможно удалить комментарий");
+      throw new Error('Невозможно удалить комментарий');
     }
 
-    this.#allComments = [
-      ...this.#allComments.slice(0, index),
-      ...this.#allComments.slice(index + 1),
+    this.#comments = [
+      ...this.#comments.slice(0, index),
+      ...this.#comments.slice(index + 1),
     ];
 
     this._notify(updateType);

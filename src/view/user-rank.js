@@ -1,14 +1,11 @@
 import AbstractView from "../framework/view/abstract-view.js";
 import { getUserRank } from "../utils/utils.js";
 
-const createTemplate = (filmsModel) => {
-  const films = filmsModel.get();
-  const userRank = getUserRank(films);
-
+const createTemplate = (userRank) => {
   return `<section class="header__profile profile">
   ${
     userRank !== null
-      ? `<p class="profile__rating">${getUserRank(films)}</p>`
+      ? `<p class="profile__rating">${userRank}</p>`
       : ""
   }
   <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
@@ -16,14 +13,14 @@ const createTemplate = (filmsModel) => {
 };
 
 export default class UserRankView extends AbstractView {
-  #films = null;
+  #userRank = null;
 
-  constructor(films) {
+  constructor(userRank) {
     super();
-    this.#films = films;
+    this.#userRank = userRank;
   }
 
   get template() {
-    return createTemplate(this.#films);
+    return createTemplate(this.#userRank);
   }
 }

@@ -1,6 +1,6 @@
-import AbstractStatefulView from "../framework/view/abstract-stateful-view.js";
-import { getDateDuration, getTimeFormat } from "../utils/utils.js";
-import he from "he";
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+import { getDateDuration, getTimeFormat } from '../utils/utils.js';
+import he from 'he';
 
 const createTemplate = ({
   filmInfo,
@@ -23,46 +23,44 @@ const createTemplate = ({
     genre,
     description,
   } = filmInfo;
-  const { watchList, alreadyWatched, favorite } = userDetails;
+  const { watchlist, alreadyWatched, favorite } = userDetails;
 
   const generateNamesList = (names) =>
-    names.length < 1 ? names[0] : names.join(", ");
+    names.length < 1 ? names[0] : names.join(', ');
 
   const generateGenreTitle = (genres) =>
-    genres.length > 1 ? "Genres" : "Genre";
+    genres.length > 1 ? 'Genres' : 'Genre';
 
   const generateGenresList = (genres) =>
     genres
       .map((genre) => `<span class="film-details__genre">${genre}</span>`)
-      .join("");
+      .join('');
 
-  const generateCommentsList = () => {
-    return comments.map(
-      (item) => `<li class="film-details__comment">
+  const generateCommentsList = () => comments.map(
+    (item) => `<li class="film-details__comment">
                 <span class="film-details__comment-emoji">
                   <img src="./images/emoji/${
-                    item.emotion
-                  }.png" width="55" height="55" alt="emoji-smile">
+  item.emotion
+}.png" width="55" height="55" alt="emoji-smile">
                 </span>
                 <div>
                   <p class="film-details__comment-text">${he.encode(
-                    item.comment
-                  )}</p>
+    item.comment
+  )}</p>
                   <p class="film-details__comment-info">
                     <span class="film-details__comment-author">${
-                      item.author
-                    }</span>
+  item.author
+}</span>
                     <span class="film-details__comment-day">${getDateDuration(
-                      item.date
-                    )}</span>
+    item.date
+  )}</span>
                     <button class="film-details__comment-delete" data-comment-id=${
-                      item.id
-                    }>Delete</button>
+  item.id
+}>Delete</button>
                   </p>
                 </div>
               </li>`
-    );
-  };
+  );
 
   return `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
@@ -72,7 +70,7 @@ const createTemplate = ({
           </div>
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
-              <img class="film-details__poster-img" src="images/posters/${poster}" alt="">
+              <img class="film-details__poster-img" src="${poster}" alt="">
 
               <p class="film-details__age">${ageRating}+</p>
             </div>
@@ -96,15 +94,11 @@ const createTemplate = ({
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Writers</td>
-                  <td class="film-details__cell">${generateNamesList(
-                    writers
-                  )}</td>
+                  <td class="film-details__cell">${generateNamesList(writers)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Actors</td>
-                  <td class="film-details__cell">${generateNamesList(
-                    actors
-                  )}</td>
+                  <td class="film-details__cell">${generateNamesList(actors)}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
@@ -119,9 +113,7 @@ const createTemplate = ({
                   <td class="film-details__cell">${release.releaseCountry}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">${generateGenreTitle(
-                    genre
-                  )}</td>
+                  <td class="film-details__term">${generateGenreTitle(genre)}</td>
                   <td class="film-details__cell">
                   ${generateGenresList(genre)}
                 </tr>
@@ -135,22 +127,22 @@ const createTemplate = ({
 
           <section class="film-details__controls">
             <button type="button" class="film-details__control-button film-details__control-button--watchlist ${
-              watchList ? "film-details__control-button--active" : ""
-            }" id="watchlist" name="watchlist">Add to watchlist</button>
+  watchlist ? 'film-details__control-button--active' : ''
+}" id="watchlist" name="watchlist">Add to watchlist</button>
             <button type="button" class="film-details__control-button film-details__control-button--watched ${
-              alreadyWatched ? "film-details__control-button--active" : ""
-            }" id="watched" name="watched">Already watched</button>
+  alreadyWatched ? 'film-details__control-button--active' : ''
+}" id="watched" name="watched">Already watched</button>
             <button type="button" class="film-details__control-button film-details__control-button--favorite ${
-              favorite ? "film-details__control-button--active" : ""
-            }" id="favorite" name="favorite">Add to favorites</button>
+  favorite ? 'film-details__control-button--active' : ''
+}" id="favorite" name="favorite">Add to favorites</button>
           </section>
         </div>
 
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${
-              comments.length
-            }</span></h3>
+  comments.length
+}</span></h3>
 
             <ul class="film-details__comments-list">
             ${generateCommentsList(comments)}
@@ -159,43 +151,43 @@ const createTemplate = ({
             <div class="film-details__new-comment">
               <div class="film-details__add-emoji-label">
               ${
-                checkedEmotion
-                  ? `<img src="images/emoji/${checkedEmotion}.png" width="55" height="55" alt="emoji-${checkedEmotion}">`
-                  : ""
-              }
+  checkedEmotion
+    ? `<img src="images/emoji/${checkedEmotion}.png" width="55" height="55" alt="emoji-${checkedEmotion}">`
+    : ''
+}
               </div>
 
               <label class="film-details__comment-label">
                 <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${
-                  comment ? comment : ""
-                }</textarea>
+  comment ? comment : ''
+}</textarea>
               </label>
 
               <div class="film-details__emoji-list">
                 <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${
-                  checkedEmotion === "smile" ? "checked" : ""
-                }>
+  checkedEmotion === 'smile' ? 'checked' : ''
+}>
                 <label class="film-details__emoji-label" for="emoji-smile" data-emotion-type="smile">
                   <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
                 </label>
 
                 <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${
-                  checkedEmotion === "sleeping" ? "checked" : ""
-                }>
+  checkedEmotion === 'sleeping' ? 'checked' : ''
+}>
                 <label class="film-details__emoji-label" for="emoji-sleeping" data-emotion-type="sleeping">
                   <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
                 </label>
 
                 <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${
-                  checkedEmotion === "puke" ? "checked" : ""
-                }>
+  checkedEmotion === 'puke' ? 'checked' : ''
+}>
                 <label class="film-details__emoji-label" for="emoji-puke" data-emotion-type="puke">
                   <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
                 </label>
 
                 <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${
-                  checkedEmotion === "angry" ? "checked" : ""
-                }>
+  checkedEmotion === 'angry' ? 'checked' : ''
+}>
                 <label class="film-details__emoji-label" for="emoji-angry" data-emotion-type="angry">
                   <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
                 </label>
@@ -261,43 +253,43 @@ export default class DetailPopupView extends AbstractStatefulView {
     this._callback.closeClick = callback;
 
     this.element
-      .querySelector(".film-details__close-btn")
-      .addEventListener("click", this.#closeClickHandler, { once: true });
+      .querySelector('.film-details__close-btn')
+      .addEventListener('click', this.#closeClickHandler, { once: true });
   }
 
   setWatchListClickHandler(callback) {
     this._callback.watchingListClick = callback;
 
     this.element
-      .querySelector(".film-details__control-button--watchlist")
-      .addEventListener("click", this.#watchListClickHandler);
+      .querySelector('.film-details__control-button--watchlist')
+      .addEventListener('click', this.#watchListClickHandler);
   }
 
   setAlreadyWatchedClickHandler(callback) {
     this._callback.alreadyWatchedClick = callback;
 
     this.element
-      .querySelector(".film-details__control-button--watched")
-      .addEventListener("click", this.#alreadyWatchedClickHandler);
+      .querySelector('.film-details__control-button--watched')
+      .addEventListener('click', this.#alreadyWatchedClickHandler);
   }
 
   setFavoriteClickHandler(callback) {
     this._callback.favoriteClick = callback;
 
     this.element
-      .querySelector(".film-details__control-button--favorite")
-      .addEventListener("click", this.#favoriteClickHandler);
+      .querySelector('.film-details__control-button--favorite')
+      .addEventListener('click', this.#favoriteClickHandler);
   }
 
   setCommentDeleteClickHandler(callback) {
     const commentDeleteElements = this.element.querySelectorAll(
-      ".film-details__comment-delete"
+      '.film-details__comment-delete'
     );
 
     if (commentDeleteElements) {
       this._callback.commentDeleteClick = callback;
       commentDeleteElements.forEach((element) =>
-        element.addEventListener("click", this.#commentDeleteClickHandler)
+        element.addEventListener('click', this.#commentDeleteClickHandler)
       );
     }
   }
@@ -341,14 +333,14 @@ export default class DetailPopupView extends AbstractStatefulView {
 
   #setHandlers = () => {
     this.element
-      .querySelectorAll(".film-details__emoji-label")
+      .querySelectorAll('.film-details__emoji-label')
       .forEach((element) => {
-        element.addEventListener("click", this.#emotionClickHandler);
+        element.addEventListener('click', this.#emotionClickHandler);
       });
 
     this.element
-      .querySelector(".film-details__comment-input")
-      .addEventListener("input", this.#commentInputChangeHandler);
+      .querySelector('.film-details__comment-input')
+      .addEventListener('input', this.#commentInputChangeHandler);
   };
 
   #updateViewData = () => {

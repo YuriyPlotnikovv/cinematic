@@ -60,7 +60,7 @@ export default class FilmPresenter {
       ...this.#film,
       userDetails: {
         ...this.#film.userDetails,
-        watchList: !this.#film.userDetails.watchList,
+        watchlist: !this.#film.userDetails.watchlist,
       },
     });
   };
