@@ -14,7 +14,7 @@ const createTemplate = ({ filmInfo, userDetails, comments }) => {
             <span class="film-card__duration">${getTimeFormat(runtime)}</span>
             <span class="film-card__genre">${genre[0]}</span>
           </p>
-          <img src="images/posters/${poster}" alt="" class="film-card__poster">
+          <img src="${poster}" alt="" class="film-card__poster">
           <p class="film-card__description">${description}</p>
           <span class="film-card__comments">${comments.length} comments</span>
         </a>

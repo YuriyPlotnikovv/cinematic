@@ -9,13 +9,20 @@ import CommentsModel from "./model/commentsModel";
 
 import { render } from "./framework/render";
 import FilterModel from "./model/filterModel";
+import FilmsApi from "./api-services/films-api";
+import CommentsApi from "./api-services/comments-api";
+
+const AUTORIZATION = "Basic asD6KnjA33Sg2b3sj4B";
+const END_POINT = "https://17.ecmascript.htmlacademy.pro/cinemaddict";
 
 const headerContainer = document.querySelector(".header");
 const main = document.querySelector(".main");
 const footerContainer = document.querySelector(".footer__statistics");
 
-const filmsModel = new FilmsModel();
-const commentsModel = new CommentsModel(filmsModel);
+const filmsModel = new FilmsModel(new FilmsApi(END_POINT, AUTORIZATION));
+const commentsModel = new CommentsModel(
+  new CommentsApi(END_POINT, AUTORIZATION)
+);
 const filterModel = new FilterModel();
 
 const mainPresenter = new MainPresenter(
@@ -31,3 +38,4 @@ render(new FooterStatisticsView(filmsModel), footerContainer);
 
 filtersPresenter.init();
 mainPresenter.init();
+filmsModel.init();

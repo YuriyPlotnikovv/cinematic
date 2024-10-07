@@ -109,6 +109,9 @@ export default class MainPresenter {
         this.#clearBoard({ resetRenderedFilmCount: true, resetSortType: true });
         this.#renderBoard();
         break;
+      case UpdateType.INIT:
+        this.#renderBoard();
+        break;
     }
   };
 
@@ -210,8 +213,10 @@ export default class MainPresenter {
     this.#filmPresenter.set(film.id, filmPresenter);
   }
 
-  #renderFilmPopup() {
-    const comments = [...this.#commentsModel.get(this.#selectedFilm)];
+  #renderFilmPopup = async () => {
+    const comments = await this.#commentsModel.get(this.#selectedFilm);
+
+    const commentsLoadingError = !comments;
 
     if (!this.#filmPopupPresenter) {
       this.#filmPopupPresenter = new FilmPopupPresenter(
@@ -221,10 +226,16 @@ export default class MainPresenter {
       );
     }
 
-    document.addEventListener("keydown", this.#onCtrlEnterKeydown);
+    if (!commentsLoadingError) {
+      document.addEventListener("keydown", this.#onCtrlEnterKeydown);
+    }
 
-    this.#filmPopupPresenter.init(this.#selectedFilm, comments);
-  }
+    this.#filmPopupPresenter.init(
+      this.#selectedFilm,
+      comments,
+      commentsLoadingError
+    );
+  };
 
   #filmButtonShowMore(container) {
     render(this.#showMoreButtonComponent, container);

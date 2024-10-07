@@ -2,25 +2,17 @@ import Observable from "../framework/observable";
 import { generateComments } from "../mock/comments";
 
 export default class CommentsModel extends Observable {
-  #filmsModel = null;
+  #apiService = null;
   #allComments = [];
   #comments = [];
 
-  constructor(filmsModel) {
+  constructor(apiService) {
     super();
-    this.#filmsModel = filmsModel;
-    this.#generateAllComments();
+    this.#apiService = apiService;
   }
 
-  #generateAllComments() {
-    this.#allComments = generateComments(this.#filmsModel.get());
-  }
-
-  get = (film) => {
-    this.#comments = film.comments.map((id) =>
-      this.#allComments.find((comment) => comment.id === id)
-    );
-
+  get = async (film) => {
+    this.#comments = await this.#apiService.get(film);
     return this.#comments;
   };
 
