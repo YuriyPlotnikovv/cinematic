@@ -50,6 +50,13 @@ const UserRankTitle = {
   MOVIE_BUFF: 'Movie Buff',
 };
 
+const NetworkMethod = {
+  PUT: 'PUT',
+  GET: 'GET',
+  POST: 'POST',
+  DELETE: 'DELETE'
+};
+
 const SortingType = {
   DEFAULT: 'default',
   DATE: 'date',
@@ -74,6 +81,11 @@ const FilterType = {
   WATCHLIST: 'watchlist',
   HISTORY: 'history',
   FAVORITES: 'favorites',
+};
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
 };
 
 const filter = {
@@ -177,4 +189,6 @@ export {
   emotions,
   text,
   countries,
+  NetworkMethod,
+  TimeLimit
 };

@@ -1,7 +1,6 @@
-import { nanoid } from "nanoid";
-import { render, replace, remove } from "../framework/render";
-import DetailPopupView from "../view/detail-popup";
-import { UpdateType, UserAction } from "../const";
+import {render, replace, remove} from '../framework/render';
+import DetailPopupView from '../view/detail-popup';
+import {UpdateType, UserAction} from '../const';
 
 export default class FilmPopupPresenter {
   #container = null;
@@ -72,31 +71,64 @@ export default class FilmPopupPresenter {
     });
   };
 
+  setCommentCreating = () => {
+    this.#filmPopupComponent.updateElement({
+      ...this.#viewData,
+      isDisabled: true,
+      isCommentCreating: true
+    });
+  };
+
+  setCommentDeleting = (commentId) => {
+    this.#filmPopupComponent.updateElement({
+      ...this.#viewData,
+      isDisabled: true,
+      deleteCommentId: commentId
+    });
+  };
+
+  setFilmEditing = () => {
+    this.#filmPopupComponent.updateElement({
+      ...this.#viewData,
+      isDisabled: true,
+      isFilmEditing: true,
+    });
+  };
+
+  setAborting = ({actionType, commentId}) => {
+    this.#filmPopupComponent.updateElement({
+      ...this.#viewData,
+      isDisabled: false,
+      deleteCommentId: null,
+      isFilmEditing: false,
+    });
+
+    switch (actionType) {
+      case UserAction.UPDATE_FILM:
+        this.#filmPopupComponent.shakeControls();
+        break;
+      case UserAction.ADD_COMMENT:
+        this.#filmPopupComponent.shakeForm();
+        break;
+      case UserAction.DELETE_COMMENT:
+        this.#filmPopupComponent.shakeComment(commentId);
+        break;
+    }
+  };
+
   createComment = () => {
     this.#filmPopupComponent.setCommentData();
 
-    const { emotion, comment } = this.#viewData;
-
+    const {emotion, comment} = this.#viewData;
     if (emotion && comment) {
-      const newCommentId = nanoid();
-
-      const createdComment = {
-        id: newCommentId,
-        author: 'Unknow Raccoon',
-        date: new Date(),
-        emotion,
-        comment,
-      };
-
       this.#filmChangeHandler(
         UserAction.ADD_COMMENT,
         UpdateType.PATCH,
-        {
-          ...this.#film,
-          comments: [...this.#film.comments, newCommentId],
-        },
-        createdComment
+        this.#film,
+        {emotion, comment}
       );
+    } else {
+      this.#filmPopupComponent.shakeForm();
     }
   };
 
@@ -131,14 +163,10 @@ export default class FilmPopupPresenter {
   };
 
   #updateViewData = (viewData) => {
-    this.#viewData = { ...viewData };
+    this.#viewData = {...viewData};
   };
 
   #commentDeleteClickHandler = (commentId) => {
-    const filmCommentIdIndex = this.#film.comments.findIndex(
-      (filmCommentId) => filmCommentId === commentId
-    );
-
     const deletedComment = this.#comments.find(
       (comment) => comment.id === commentId
     );
@@ -146,13 +174,7 @@ export default class FilmPopupPresenter {
     this.#filmChangeHandler(
       UserAction.DELETE_COMMENT,
       UpdateType.PATCH,
-      {
-        ...this.#film,
-        comments: [
-          ...this.#film.comments.slice(0, filmCommentIdIndex),
-          ...this.#film.comments.slice(filmCommentIdIndex + 1),
-        ],
-      },
+      this.#film,
       deletedComment
     );
   };

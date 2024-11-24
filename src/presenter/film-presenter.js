@@ -1,6 +1,6 @@
-import { UpdateType, UserAction } from "../const";
-import { render, replace, remove } from "../framework/render";
-import FilmCardView from "../view/film-card";
+import { UpdateType, UserAction } from '../const';
+import { render, replace, remove } from '../framework/render';
+import FilmCardView from '../view/film-card';
 
 export default class FilmPresenter {
   #container = null;
@@ -32,7 +32,7 @@ export default class FilmPresenter {
 
     this.#filmCardComponent.setOpenClickHandler(() => {
       this.#addPopupClickHandler(this.#film);
-      document.addEventListener("keydown", this.#onEscClickHandler);
+      document.addEventListener('keydown', this.#onEscClickHandler);
     });
 
     this.#filmCardComponent.setWatchListClickHandler(
@@ -87,5 +87,14 @@ export default class FilmPresenter {
 
   destroy = () => {
     remove(this.#filmCardComponent);
+  };
+
+  setFilmEditing = () => {
+    this.#filmCardComponent.updateElement({isFilmEditing: true});
+  };
+
+  setAborting = () => {
+    this.#filmCardComponent.updateElement({isFilmEditing: false});
+    this.#filmCardComponent.shakeControls();
   };
 }

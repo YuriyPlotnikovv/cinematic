@@ -23,29 +23,6 @@ export default class FilmsModel extends Observable {
 
   get = () => this.#films;
 
-  update = async (updateType, update) => {
-    const index = this.#films.findIndex((film) => film.id === update.id);
-
-    if (index === -1) {
-      throw new Error('Невозможно обновить фильм');
-    }
-
-    try {
-      const response = await this.#apiService.update(update);
-      const updatedFilm = this.#adaptFromServer(response);
-
-      this.#films = [
-        ...this.#films.slice(0, index),
-        updatedFilm,
-        ...this.#films.slice(index + 1),
-      ];
-
-      this._notify(updateType, updatedFilm);
-    } catch {
-      throw new Error('Невозможно обновить фильм');
-    }
-  };
-
   #adaptFromServer(film) {
     const adaptedFilm = {
       ...film,
@@ -72,4 +49,48 @@ export default class FilmsModel extends Observable {
 
     return adaptedFilm;
   }
+
+  updateOnClient = ({updateType, update, isAdapted}) => {
+    const index = this.#films.findIndex((film) => film.id === update.id);
+
+    if (index === -1) {
+      throw new Error('Невозможно обновить несуществующий фильм');
+    }
+
+    const updatedFilm = (!isAdapted)
+      ? this.#adaptFromServer(update)
+      : update;
+
+    this.#films = [
+      ...this.#films.slice(0, index),
+      updatedFilm,
+      ...this.#films.slice(index + 1)
+    ];
+
+    this._notify(updateType, updatedFilm);
+  };
+
+  updateOnServer = async (updateType, update) => {
+    const index = this.#films.findIndex((film) => film.id === update.id);
+
+    if (index === -1) {
+      throw new Error('Невозможно обновить несуществующий фильм');
+    }
+
+    try {
+      const response = await this.#apiService.update(update);
+
+      const updatedFilm = this.#adaptFromServer(response);
+
+      this.#films = [
+        ...this.#films.slice(0, index),
+        updatedFilm,
+        ...this.#films.slice(index + 1)
+      ];
+
+      this._notify(updateType, updatedFilm);
+    } catch {
+      throw new Error('Невозможно обновить фильм');
+    }
+  };
 }

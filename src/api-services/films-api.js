@@ -1,4 +1,5 @@
 import ApiService from '../framework/api-service';
+import {NetworkMethod} from '../const';
 
 export default class FilmsApi extends ApiService {
   get = () => this._load({ url: 'movies' }).then(ApiService.parseResponse);
@@ -6,13 +7,11 @@ export default class FilmsApi extends ApiService {
   update = async (film) => {
     const response = await  this._load({
       url: `movies/${film.id}`,
-      method: 'PUT',
+      method: NetworkMethod.PUT,
       body: JSON.stringify(this.#adaptToServer(film)),
       headers: new Headers({'Content-Type': 'application/json'})
     });
-    const parsedResponse = await ApiService.parseResponse(response);
-
-    return parsedResponse;
+    return await ApiService.parseResponse(response);
   };
 
 

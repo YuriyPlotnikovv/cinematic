@@ -2,11 +2,13 @@ import Observable from '../framework/observable';
 
 export default class CommentsModel extends Observable {
   #apiService = null;
+  #filmsModel = null;
   #comments = [];
 
-  constructor(apiService) {
+  constructor(apiService, filmsModel) {
     super();
     this.#apiService = apiService;
+    this.#filmsModel = filmsModel;
   }
 
   get = async (film) => {
@@ -14,25 +16,47 @@ export default class CommentsModel extends Observable {
     return this.#comments;
   };
 
-  add = (updateType, update) => {
-    this.#comments.push(update);
-    this._notify(updateType, update);
+  add = async (updateType, film, newComment) => {
+    try {
+      const response = await this.#apiService.add(film, newComment);
+
+      this.#comments = response.comments;
+      this.#filmsModel.updateOnClient({
+        updateType,
+        update: response.movie,
+        isAdapted: false
+      });
+    } catch {
+      throw new Error('Невозможно добавить комментарий');
+    }
   };
 
-  delete = (updateType, update) => {
+  delete = async (updateType, film, deletedComment) => {
     const index = this.#comments.findIndex(
-      (comment) => comment.id === update.id
+      (comment) => comment.id === deletedComment.id
     );
 
     if (index === -1) {
       throw new Error('Невозможно удалить комментарий');
     }
 
-    this.#comments = [
-      ...this.#comments.slice(0, index),
-      ...this.#comments.slice(index + 1),
-    ];
+    try {
+      await this.#apiService.delete(deletedComment);
 
-    this._notify(updateType);
+      const updateFilm = {
+        ...film,
+        comments: [
+          ...film.comments.slice(0, index),
+          ...film.comments.slice(index + 1)
+        ]
+      };
+      this.#filmsModel.updateOnClient({
+        updateType,
+        update: updateFilm,
+        isAdapted: true
+      });
+    } catch {
+      throw new Error('Невозможно удалить комментарий');
+    }
   };
 }

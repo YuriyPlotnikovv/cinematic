@@ -1,4 +1,5 @@
-import ApiService from "../framework/api-service";
+import ApiService from '../framework/api-service';
+import {NetworkMethod} from '../const';
 
 export default class CommentsApi extends ApiService {
   get = (film) =>
@@ -6,15 +7,21 @@ export default class CommentsApi extends ApiService {
       .then(ApiService.parseResponse)
       .catch(() => null);
 
-  update = async (film) => {
+  add = async (film, comment) => {
     const response = await  this._load({
       url: `comments/${film.id}`,
-      method: 'PUT',
-      body: JSON.stringify(film),
+      method: NetworkMethod.POST,
+      body: JSON.stringify(comment),
       headers: new Headers({'Content-Type': 'application/json'})
     });
-    const parsedResponse = await ApiService.parseResponse(response);
+    return await ApiService.parseResponse(response);
+  };
 
-    return parsedResponse;
+  delete = async (comment) => {
+    await  this._load({
+      url: `comments/${comment.id}`,
+      method: NetworkMethod.DELETE,
+      headers: new Headers({'Content-Type': 'application/json'})
+    });
   };
 }

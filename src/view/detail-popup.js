@@ -37,26 +37,28 @@ const createTemplate = ({
       .join('');
 
   const generateCommentsList = () => comments.map(
-    (item) => `<li class="film-details__comment">
+    (item) => `<li class="film-details__comment" data-comment-id=${
+      item.id
+    }>
                 <span class="film-details__comment-emoji">
                   <img src="./images/emoji/${
-  item.emotion
-}.png" width="55" height="55" alt="emoji-smile">
+      item.emotion
+    }.png" width="55" height="55" alt="emoji-smile">
                 </span>
                 <div>
                   <p class="film-details__comment-text">${he.encode(
-    item.comment
-  )}</p>
+      item.comment
+    )}</p>
                   <p class="film-details__comment-info">
                     <span class="film-details__comment-author">${
-  item.author
-}</span>
+      item.author
+    }</span>
                     <span class="film-details__comment-day">${getDateDuration(
-    item.date
-  )}</span>
+      item.date
+    )}</span>
                     <button class="film-details__comment-delete" data-comment-id=${
-  item.id
-}>Delete</button>
+      item.id
+    }>Delete</button>
                   </p>
                 </div>
               </li>`
@@ -294,21 +296,36 @@ export default class DetailPopupView extends AbstractStatefulView {
     }
   }
 
-  #closeClickHandler = (evt) => {
+  shakeComment = (commentId) => {
+    const commentElement = this.element.querySelector(`li[data-comment-id='${commentId}']`);
+    this.shake.call({element: commentElement});
+  };
+
+  shakeForm = () => {
+    const formElement = this.element.querySelector('.film-details__new-comment');
+    this.shake.call({element: formElement});
+  };
+
+  shakeControls = () => {
+    const controlsElement = this.element.querySelector('.film-details__controls');
+    this.shake.call({element: controlsElement});
+  };
+
+  #closeClickHandler = () => {
     this._callback.closeClick();
   };
 
-  #watchListClickHandler = (evt) => {
+  #watchListClickHandler = () => {
     this.#updateViewData();
     this._callback.watchingListClick();
   };
 
-  #alreadyWatchedClickHandler = (evt) => {
+  #alreadyWatchedClickHandler = () => {
     this.#updateViewData();
     this._callback.alreadyWatchedClick();
   };
 
-  #favoriteClickHandler = (evt) => {
+  #favoriteClickHandler = () => {
     this.#updateViewData();
     this._callback.favoriteClick();
   };

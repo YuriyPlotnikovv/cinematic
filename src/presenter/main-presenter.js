@@ -9,16 +9,17 @@ import ShowMoreButtonView from '../view/show-more-button';
 import FilmPresenter from './film-presenter';
 import FilmPopupPresenter from './film-popup-presenter';
 
-import { render, remove, replace } from '../framework/render';
+import {render, remove, replace} from '../framework/render';
 import {
   FILM_COUNT_PER_STEP,
   FilterType,
   SortingType,
   UpdateType,
   UserAction,
-  filter,
+  filter, TimeLimit,
 } from '../const';
-import { sortingByDate, sortingByRate } from '../utils/utils';
+import {sortingByDate, sortingByRate} from '../utils/utils';
+import UiBlocker from '../framework/ui-blocker/ui-blocker';
 
 export default class MainPresenter {
   #sortingComponent = null;
@@ -41,6 +42,7 @@ export default class MainPresenter {
 
   #renderedFilmCount = FILM_COUNT_PER_STEP;
   #isloading = true;
+  #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
   constructor(container, filmsModel, commentsModel, filterModel) {
     this.#container = container;
@@ -73,21 +75,57 @@ export default class MainPresenter {
     this.#renderBoard();
   };
 
-  #viewActionHandler = (actionType, updateType, updateFilm, updateComment) => {
+  #viewActionHandler = async (actionType, updateType, updateFilm, updateComment) => {
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this.#filmsModel.update(updateType, updateFilm);
+        if (
+          this.#filmPresenter.get(updateFilm.id) &&
+          !this.#filmPopupPresenter
+        ) {
+          this.#filmPresenter.get(updateFilm.id).setFilmEditing();
+        }
+
+        if (this.#filmPopupPresenter) {
+          this.#filmPopupPresenter.setFilmEditing();
+        }
+
+        try {
+          await this.#filmsModel.updateOnServer(updateType, updateFilm);
+        } catch {
+          if (
+            this.#filmPresenter.get(updateFilm.id) &&
+            !this.#filmPopupPresenter
+          ) {
+            this.#filmPresenter.get(updateFilm.id).setAborting();
+          }
+
+          if (this.#filmPopupPresenter) {
+            this.#filmPopupPresenter.setAborting({actionType});
+          }
+        }
         break;
       case UserAction.ADD_COMMENT:
-        this.#commentsModel.add(updateType, updateComment);
-        this.#filmPopupPresenter.clearViewData();
-        this.#filmsModel.update(updateType, updateFilm);
+        this.#filmPopupPresenter.setCommentCreating();
+        try {
+          await this.#commentsModel.add(updateType, updateFilm, updateComment);
+          this.#filmPopupPresenter.clearViewData();
+        } catch {
+          this.#filmPopupPresenter.setAborting({actionType});
+        }
         break;
       case UserAction.DELETE_COMMENT:
-        this.#commentsModel.delete(updateType, updateComment);
-        this.#filmsModel.update(updateType, updateFilm);
+        this.#filmPopupPresenter.setCommentDeleting(updateComment.id);
+        try {
+          await this.#commentsModel.delete(updateType, updateFilm, updateComment);
+        } catch {
+          this.#filmPopupPresenter.setAborting({actionType, commentId: updateComment.id});
+        }
         break;
     }
+
+    this.#uiBlocker.unblock();
   };
 
   #modelEventHandler = (updateType, data) => {
@@ -109,7 +147,7 @@ export default class MainPresenter {
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        this.#clearBoard({ resetRenderedFilmCount: true, resetSortType: true });
+        this.#clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this.#renderBoard();
         break;
       case UpdateType.INIT:
@@ -303,9 +341,9 @@ export default class MainPresenter {
   };
 
   #clearBoard = ({
-    resetRenderedFilmCount = false,
-    resetSortType = false,
-  } = {}) => {
+                   resetRenderedFilmCount = false,
+                   resetSortType = false,
+                 } = {}) => {
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
 

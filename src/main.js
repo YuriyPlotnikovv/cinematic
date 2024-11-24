@@ -19,7 +19,7 @@ const footerContainer = document.querySelector('.footer__statistics');
 
 const filmsModel = new FilmsModel(new FilmsApi(END_POINT, AUTHORIZATION));
 const commentsModel = new CommentsModel(
-  new CommentsApi(END_POINT, AUTHORIZATION)
+  new CommentsApi(END_POINT, AUTHORIZATION), filmsModel
 );
 const filterModel = new FilterModel();
 

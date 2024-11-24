@@ -1,5 +1,5 @@
-import AbstractView from "../framework/view/abstract-view.js";
-import { getTimeFormat } from "../utils/utils.js";
+import { getTimeFormat } from '../utils/utils.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 const createTemplate = ({ filmInfo, userDetails, comments }) => {
   const { title, totalRating, release, runtime, genre, poster, description } =
@@ -20,39 +20,46 @@ const createTemplate = ({ filmInfo, userDetails, comments }) => {
         </a>
         <div class="film-card__controls">
           <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${
-            userDetails.watchlist ? "film-card__controls-item--active" : ""
+            userDetails.watchlist ? 'film-card__controls-item--active' : ''
           }" type="button">Add to watchlist</button>
           <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${
-            userDetails.alreadyWatched ? "film-card__controls-item--active" : ""
+            userDetails.alreadyWatched ? 'film-card__controls-item--active' : ''
           }" type="button">Mark as watched</button>
           <button class="film-card__controls-item film-card__controls-item--favorite ${
-            userDetails.favorite ? "film-card__controls-item--active" : ""
+            userDetails.favorite ? 'film-card__controls-item--active' : ''
           }" type="button">Mark as favorite</button>
         </div>
       </article>`;
 };
 
-export default class FilmCardView extends AbstractView {
+export default class FilmCardView extends AbstractStatefulView {
   #film = null;
 
   constructor(film) {
     super();
-    this.#film = film;
+    this._state = this.parseFilmToState(film);
   }
 
   get template() {
-    return createTemplate(this.#film);
+    return createTemplate(this._state);
   }
+
+  _restoreHandlers = () => {
+    this.setOpenClickHandler(this._callback.openClick);
+    this.setWatchListClickHandler(this._callback.watchListClick);
+    this.setAlreadyWatchedClickHandler(this._callback.alreadyWatchedClick);
+    this.setFavoriteClickHandler(this._callback.favoriteClick);
+  };
 
   setOpenClickHandler(callback) {
     this._callback.openClick = callback;
 
     this.element
-      .querySelector(".film-card__link")
-      .addEventListener("click", this.#openClickHandler);
+      .querySelector('.film-card__link')
+      .addEventListener('click', this.#openClickHandler);
   }
 
-  #openClickHandler = (evt) => {
+  #openClickHandler = () => {
     this._callback.openClick();
   };
 
@@ -60,11 +67,11 @@ export default class FilmCardView extends AbstractView {
     this._callback.watchListClick = callback;
 
     this.element
-      .querySelector(".film-card__controls-item--add-to-watchlist")
-      .addEventListener("click", this.#watchListClickHandler);
+      .querySelector('.film-card__controls-item--add-to-watchlist')
+      .addEventListener('click', this.#watchListClickHandler);
   }
 
-  #watchListClickHandler = (evt) => {
+  #watchListClickHandler = () => {
     this._callback.watchListClick();
   };
 
@@ -72,11 +79,11 @@ export default class FilmCardView extends AbstractView {
     this._callback.alreadyWatchedClick = callback;
 
     this.element
-      .querySelector(".film-card__controls-item--mark-as-watched")
-      .addEventListener("click", this.#alreadyWatchedClickHandler);
+      .querySelector('.film-card__controls-item--mark-as-watched')
+      .addEventListener('click', this.#alreadyWatchedClickHandler);
   }
 
-  #alreadyWatchedClickHandler = (evt) => {
+  #alreadyWatchedClickHandler = () => {
     this._callback.alreadyWatchedClick();
   };
 
@@ -84,11 +91,21 @@ export default class FilmCardView extends AbstractView {
     this._callback.favoriteClick = callback;
 
     this.element
-      .querySelector(".film-card__controls-item--favorite")
-      .addEventListener("click", this.#favoriteClickHandler);
+      .querySelector('.film-card__controls-item--favorite')
+      .addEventListener('click', this.#favoriteClickHandler);
   }
 
-  #favoriteClickHandler = (evt) => {
+  #favoriteClickHandler = () => {
     this._callback.favoriteClick();
   };
+
+  shakeControls = () => {
+    const controlsElement = this.element.querySelector('.film-card__controls');
+    this.shake.call({element: controlsElement});
+  };
+
+  parseFilmToState = (film) => ({
+    ...film,
+    isFilmEditing: false
+  });
 }
