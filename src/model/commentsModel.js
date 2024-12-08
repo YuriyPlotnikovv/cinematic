@@ -1,4 +1,5 @@
 import Observable from '../framework/observable';
+import {UpdateType} from '../const';
 
 export default class CommentsModel extends Observable {
   #apiService = null;
@@ -26,6 +27,8 @@ export default class CommentsModel extends Observable {
         update: response.movie,
         isAdapted: false
       });
+
+      this._notify(UpdateType.EXTRA);
     } catch {
       throw new Error('Невозможно добавить комментарий');
     }
@@ -55,6 +58,8 @@ export default class CommentsModel extends Observable {
         update: updateFilm,
         isAdapted: true
       });
+
+      this._notify(UpdateType.EXTRA);
     } catch {
       throw new Error('Невозможно удалить комментарий');
     }

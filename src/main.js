@@ -35,6 +35,6 @@ const filtersPresenter = new FiltersPresenter(mainContainer, filmsModel, filterM
 
 userRankPresenter.init();
 footerStatisticsPresenter.init();
-filtersPresenter.init();
 mainPresenter.init();
+filtersPresenter.init();
 filmsModel.init();

@@ -8,6 +8,8 @@ const FILM_COUNT_PER_STEP = 5;
 
 const FILTER_TYPE_ALL_NAME = 'All movies';
 
+const FILM_EXTRA_COUNT = 2;
+
 const GenreCount = {
   MIN: 1,
   MAX: 3,
@@ -74,6 +76,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  EXTRA: 'EXTRA',
 };
 
 const FilterType = {
@@ -86,6 +89,11 @@ const FilterType = {
 const TimeLimit = {
   LOWER_LIMIT: 350,
   UPPER_LIMIT: 1000,
+};
+
+const ExtraFilmListType = {
+  RATE: 'RATE',
+  COMMENT: 'COMMENT',
 };
 
 const filter = {
@@ -168,6 +176,7 @@ export {
   MAX_COMMENTS_ON_FILM,
   FILM_COUNT_PER_STEP,
   FILTER_TYPE_ALL_NAME,
+  FILM_EXTRA_COUNT,
   titles,
   GenreCount,
   Rating,
@@ -190,5 +199,6 @@ export {
   text,
   countries,
   NetworkMethod,
-  TimeLimit
+  TimeLimit,
+  ExtraFilmListType
 };
