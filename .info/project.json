@@ -1,0 +1,50 @@
+{
+  "id": 5,
+  "title-ru": "Cinematic",
+  "title-en": "Cinematic",
+  "textFirst-ru": "Проект на JS и MVP",
+  "textFirst-en": "Project on JS and MVP",
+  "textSecond-ru": "Пятый учебный проект, разработан в рамках курса Frontend-разработчик от HTML Academy. Проект направлен на изучение работы фреймворков под капотом: реализация паттерна MVP с разделением зон ответственности частей приложения.",
+  "textSecond-en": "The fifth training project was developed as part of the Frontend Developer course from the HTML Academy. The project is aimed at studying the work of frameworks under the hood: the implementation of the MVP pattern with the separation of responsibilities of parts of the application.",
+  "deploy": "https://cinematic-training.netlify.app/",
+  "features": [
+    {
+      "name-ru": "Страницы",
+      "name-en": "Pages",
+      "description-ru": [
+        "Главная"
+      ],
+      "description-en": [
+        "Main"
+      ]
+    },
+    {
+      "name-ru": "Функциональность",
+      "name-en": "Functionality",
+      "description-ru": [
+        "Данные хранятся на сервере, приходят через fetch-запросы",
+        "Фильтрация и сортировка фильмов",
+        "Добавление в списки",
+        "Комментарии к фильмам",
+        "Динамическое обновление данных на странице и сервере"
+      ],
+      "description-en": [
+        "Data is stored on the server, it comes through fetch requests",
+        "Filtering and sorting movies",
+        "Adding to lists",
+        "Comments on movies",
+        "Dynamic updating of data on the page and server"
+      ]
+    },
+    {
+      "name-ru": "Не реализовано",
+      "name-en": "Not Implemented",
+      "description-ru": [
+        "Адаптивность под разные устройства"
+      ],
+      "description-en": [
+        "Adaptability to different devices"
+      ]
+    }
+  ]
+}
