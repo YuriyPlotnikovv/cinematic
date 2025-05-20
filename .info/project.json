@@ -9,6 +9,16 @@
   "deploy": "https://cinematic-training.netlify.app/",
   "features": [
     {
+      "name-ru": "Дата разработки",
+      "name-en": "Development date",
+      "description-ru": [
+        "Декабрь 2024"
+      ],
+      "description-en": [
+        "December 2024"
+      ]
+    },
+    {
       "name-ru": "Страницы",
       "name-en": "Pages",
       "description-ru": [
@@ -45,6 +55,28 @@
       "description-en": [
         "Adaptability to different devices"
       ]
+    }
+  ],
+  "technologies": [
+    {
+      "name": "HTML",
+      "icon": "icon-html",
+      "link": "https://html.spec.whatwg.org/multipage/"
+    },
+    {
+      "name": "CSS",
+      "icon": "icon-css",
+      "link": "https://www.w3.org/Style/CSS/"
+    },
+    {
+      "name": "JavaScript",
+      "icon": "icon-js",
+      "link": "https://ecma-international.org/publications-and-standards/standards/ecma-262/"
+    },
+    {
+      "name": "Webpack",
+      "icon": "icon-webpack",
+      "link": "https://webpack.js.org/"
     }
   ]
 }
