@@ -8,6 +8,6 @@
 * Динамическое обновление данных на странице и сервере
 
 ---
-Деплой проекта: https://cinematic-training.netlify.app/
+Деплой проекта: https://cinematic-training.yp-projects.ru/
 ---
 Мой пятый учебный проект, написанный в рамках курса Javascript-разработчик от HTML Academy
